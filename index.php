@@ -34,8 +34,7 @@
 <body>
     <?php include 'includes/navbar.php';?>
 
-    <!-- ############################################# MODAL ############################################# -->
-
+    <!-- EDIT MODAL -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -44,16 +43,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST">
-                        <div class="alert alert-danger" style="display: none;" id="edit-required-alert" role="alert">
-                            All fields are required.
-                        </div>
-                        <div class="alert alert-danger" style="display: none;" id="edit-title-alert" role="alert">
-                            Title already exist.
-                        </div>
-                        <div class="alert alert-success" style="display: none;" id="edit-success" role="alert">
-                            Movie successfully added!
-                        </div>
+                    <form action="includes/crud.php" method="POST">
                         <div class="mb-3" style="display: none;">
                             <label for="movie-id" class="form-label">Movie ID</label>
                             <input type="text" class="form-control" placeholder="Movie ID" id="movie-id"
@@ -79,45 +69,18 @@
                             <input type="text" class="form-control" placeholder="Enter Movie Director"
                                 id="edit-director" name="editDirector">
                         </div>
-                    </form>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" name="update">Save changes</button>
                 </div>
-                <?php 
-                    if(isset($_POST['update'])) {
-                        $title = $_POST['editTitle'];
-                        $actor = $_POST['editActor'];
-                        $genre = $_POST['editGenre'];
-                        $director = $_POST['editDirector'];
-
-                        if (empty($title) || empty($actor) || empty($genre) || empty($director)) {
-                            echo "<script>var alert = document.getElementById('required-alert');
-                                                                                    alert.removeAttribute('style');
-                                                                                    </script>";
-                        } else {
-                            $check = mysqli_query($conn, "SELECT * FROM tblmovies WHERE title = '$title'");
-                            if (mysqli_num_rows($check)) {
-                                echo "<script>var alert = document.getElementById('title-alert');
-                                                                                    alert.removeAttribute('style');
-                                                                                    </script>";
-                            } else {
-                                $insert = mysqli_query($conn, "INSERT INTO tblmovies (title, actor, genre, director) VALUES ('$title', '$actor', '$genre', '$director')");
-                                if ($insert) {
-                                    echo "<script>var alert = document.getElementById('success');
-                                                                                            alert.removeAttribute('style');
-                                                                                            </script>";
-                                }
-                            }
-                        }
-                    }
-                ?>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- ############################################# ADD MOVIES ############################################# -->
+    <!-- ADD MOVIES -->
     <div class="container mt-3">
         <div class="card" style="width: 100%; padding: 10px;">
             <div class="row gx-2">
@@ -139,7 +102,7 @@
                                 }
                                 if(isset($_SESSION['status']) && $_SESSION['status'] == 'upload successfully') {
                                     echo '<div class="alert alert-success" id="success" role="alert">
-                                    Movie successfully added!
+                                    Movie added successfully!
                                     </div>';
                                     unset($_SESSION['status']);
                                 }
@@ -170,9 +133,31 @@
                     </div>
                 </div>
 
-                <!-- ############################################# MOVIES LIST ############################################# -->
+                <!-- MOVIES LIST TABLE -->
                 <div class="col-md-9 mx-0">
                     <div class="card" style="width: 100%; padding: 10px;">
+                        <form action="">
+                            <?php 
+                                if(isset($_SESSION['status']) && $_SESSION['status'] == 'no input in edit') {
+                                    echo '<div class="alert alert-danger" id="title-alert" role="alert">
+                                    All fields are required.
+                                    </div>';
+                                    unset($_SESSION['status']);
+                                }
+                                if(isset($_SESSION['status']) && $_SESSION['status'] == 'update unsuccessfully') {
+                                    echo '<div class="alert alert-danger" id="title-alert" role="alert">
+                                    Movie details update unsuccessfully!
+                                    </div>';
+                                    unset($_SESSION['status']);
+                                }
+                                if(isset($_SESSION['status']) && $_SESSION['status'] == 'updated successfully') {
+                                    echo '<div class="alert alert-success" id="success" role="alert">
+                                    Movie details updated successfully!
+                                    </div>';
+                                    unset($_SESSION['status']);
+                                }
+                            ?>
+                        </form>
                         <table id="movie" class="hover" style="border-color: teal;">
                             <thead>
                                 <tr style="white-space: nowrap;">

@@ -47,6 +47,29 @@
         }
     }
 
+    if(isset($_POST['update'])) {
+        $id = $_POST['movie-id'];
+        $update_title = $_POST['editTitle'];
+        $update_actor = $_POST['editActor'];
+        $update_genre = $_POST['editGenre'];
+        $update_director = $_POST['editDirector'];
+
+        if (empty($update_title) || empty($update_actor) || empty($update_genre) || empty($update_director)) {
+            $_SESSION['status'] = "no input in edit";
+            echo '<script>window.location.replace("../index.php");</script>';
+        } else {
+            $query = mysqli_query($conn, "UPDATE tblmovies SET title = '$update_title', actor = '$update_actor', genre = '$update_genre', director = '$update_director' WHERE movie_id= '$id'");
+            
+            if($query) {
+                $_SESSION['status'] = "updated successfully";
+                echo '<script>window.location.replace("../index.php");</script>';
+            } else {
+                $_SESSION['status'] = "update unsuccessfully";
+                echo '<script>window.location.replace("../index.php");</script>';
+            }
+        }
+    }
+
 // DELETE
     
 ?>
