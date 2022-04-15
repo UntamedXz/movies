@@ -22,12 +22,6 @@
     <script>
     $(document).ready(function() {
         $('#movie').dataTable({
-            // "aLengthMenu": [
-            //     [5, 10, 20, -1],
-            //     [5, 10, 20, "All"]
-            // ],
-            // "iDisplayLength": 5,
-            // "pagingType": "simple",
             "scrollY": "55vh",
             "scrollCollapse": true,
             "paging": false
@@ -204,14 +198,11 @@
                                     <td><?php echo $row['genre']; ?></td>
                                     <td><?php echo $row['director']; ?></td>
                                     <td class="action">
-                                        <!-- <a href="#" class="fa-solid fa-pen-to-square text-success"></a>
-                                            <a href="#" class="fa-solid fa-trash text-danger"></a> -->
                                         <center>
                                             <a href="#" class="edit" data-bs-toggle="modal"
                                                 data-bs-target="#editModal"><i
                                                     class="fa-solid fa-pen-to-square "></i>EDIT</a>
                                             <a href="#" class="delete"><i class="fa-solid fa-trash"></i>DELETE</a>
-                                            <!-- <a href="#" class="edit">EDIT</a> -->
                                         </center>
                                     </td>
                                 </tr>
@@ -246,16 +237,13 @@
                     'movie_id': id,
                 },
                 success: function(response) {
-                    // console.log(response);
                     $.each(response, function(key, value) {
-                        // console.log(value['movie_id']);
                         $('#movie-id').val(value['movie_id']);
                         $('#edit-title').val(value['title']);
                         $('#edit-actor').val(value['actor']);
                         $('#edit-genre').val(value['genre']);
                         $('#edit-director').val(value['director']);
                     });
-                    // $('#editModal').modal('show');
                 }
             });
         });

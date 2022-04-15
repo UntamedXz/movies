@@ -10,26 +10,16 @@
         $director = $_POST['inputDirector'];
 
         if (empty($title) || empty($actor) || empty($genre) || empty($director)) {
-            // $error_empty = "<script>var alert = document.getElementById('required-alert');
-            // alert.removeAttribute('style');
-            // </script>";
             $_SESSION['status'] = "no input";
             echo '<script>window.location.replace("../index.php");</script>';
         } else {
             $check = mysqli_query($conn, "SELECT * FROM tblmovies WHERE title = '$title'");
             if (mysqli_num_rows($check)) {
-                // echo '<script>window.location.replace("../index.php");</script>';
-                // echo "<script>var alert = document.getElementById('title-alert');
-                //                                                     alert.removeAttribute('style');
-                //                                                     </script>";
                 $_SESSION['status'] = "title exist";
                 echo '<script>window.location.replace("../index.php");</script>';
             } else {
                 $insert = mysqli_query($conn, "INSERT INTO tblmovies (title, actor, genre, director) VALUES ('$title', '$actor', '$genre', '$director')");
                 if ($insert) {
-                    // echo "<script>var alert = document.getElementById('success');
-                    //                                                         alert.removeAttribute('style');
-                    //                                                         </script>";
                     $_SESSION['status'] = "upload successfully";
                     echo '<script>window.location.replace("../index.php");</script>';
                 }
