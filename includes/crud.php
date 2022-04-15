@@ -4,10 +4,10 @@
 
 // CREATE 
     if (isset($_POST['submit'])) {
-        $title = $_POST['inputTitle'];
-        $actor = $_POST['inputActor'];
-        $genre = $_POST['inputGenre'];
-        $director = $_POST['inputDirector'];
+        $title = mysqli_real_escape_string($conn, $_POST['inputTitle']);
+        $actor = mysqli_real_escape_string($conn, $_POST['inputActor']);
+        $genre = mysqli_real_escape_string($conn, $_POST['inputGenre']);
+        $director = mysqli_real_escape_string($conn, $_POST['inputDirector']);
 
         if (empty($title) || empty($actor) || empty($genre) || empty($director)) {
             $_SESSION['status'] = "no input";
@@ -69,23 +69,44 @@
 
     if(isset($_POST['update'])) {
         $id = $_POST['movie-id'];
-        $update_title = $_POST['editTitle'];
-        $update_actor = $_POST['editActor'];
-        $update_genre = $_POST['editGenre'];
-        $update_director = $_POST['editDirector'];
+        $title = mysqli_real_escape_string($conn, $_POST['editTitle']);
+        $actor = mysqli_real_escape_string($conn, $_POST['editActor']);
+        $genre = mysqli_real_escape_string($conn, $_POST['editGenre']);
+        $director = mysqli_real_escape_string($conn, $_POST['editDirector']);
 
-        if (empty($update_title) || empty($update_actor) || empty($update_genre) || empty($update_director)) {
+        if (empty($title) || empty($actor) || empty($genre) || empty($director)) {
             $_SESSION['status'] = "no input in edit";
             echo '<script>window.location.replace("../index.php");</script>';
         } else {
-            $query = mysqli_query($conn, "UPDATE tblmovies SET title = '$update_title', actor = '$update_actor', genre = '$update_genre', director = '$update_director' WHERE movie_id= '$id'");
+            $check = mysqli_query($conn, "SELECT * FROM tblmovies WHERE title = '$title'");
             
-            if($query) {
-                $_SESSION['status'] = "updated successfully";
-                echo '<script>window.location.replace("../index.php");</script>';
+
+            if(mysqli_num_rows($check) == 1) {
+                $check_2 = mysqli_query($conn, "SELECT * FROM tblmovies WHERE title = '$title' AND movie_id = '$id'");
+                if(mysqli_num_rows($check_2) == 0) {
+                    $_SESSION['status'] = "title already exist";
+                    echo '<script>window.location.replace("../index.php");</script>';
+                } else {
+                    $query = mysqli_query($conn, "UPDATE tblmovies SET title = '$title', actor = '$actor', genre = '$genre', director = '$director' WHERE movie_id= '$id'");
+            
+                    if($query) {
+                        $_SESSION['status'] = "updated successfully";
+                        echo '<script>window.location.replace("../index.php");</script>';
+                    } else {
+                        $_SESSION['status'] = "update unsuccessfully";
+                        echo '<script>window.location.replace("../index.php");</script>';
+                    }
+                }
             } else {
-                $_SESSION['status'] = "update unsuccessfully";
-                echo '<script>window.location.replace("../index.php");</script>';
+                $query = mysqli_query($conn, "UPDATE tblmovies SET title = '$title', actor = '$actor', genre = '$genre', director = '$director' WHERE movie_id= '$id'");
+            
+                if($query) {
+                    $_SESSION['status'] = "updated successfully";
+                    echo '<script>window.location.replace("../index.php");</script>';
+                } else {
+                    $_SESSION['status'] = "update unsuccessfully";
+                    echo '<script>window.location.replace("../index.php");</script>';
+                }
             }
         }
     }

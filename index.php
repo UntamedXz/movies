@@ -23,6 +23,7 @@
     $(document).ready(function() {
         $('#movie').dataTable({
             "scrollY": "55vh",
+            "scrollX": true,
             "scrollCollapse": true,
             "paging": false
         });
@@ -127,13 +128,12 @@
     </div>
 
 <!-- ADD MOVIES -->
-    <div class="container mt-3">
-        <div class="card" style="width: 100%; padding: 10px;">
-            <div class="row gx-2">
+    <div class="container-fluid mt-3">
+        <div class="card" style="width: 100%; padding: 10px; margin-top: 80px;">
+            <div class="row gx-2 gy-2">
                 <div class="col-md-3 mx-0">
                     <div class="card" style="width: 100%; padding: 10px;">
                         <form action="includes/crud.php" method="POST">
-                            <h1 style="text-align: center; font-weight: 700; font-size: 32px;">ADD MOVIE</h1>
                             <?php 
                                 if(isset($_SESSION['status']) && $_SESSION['status'] == 'no input') {
                                     echo '<div class="alert alert-danger" id="required-alert" role="alert">
@@ -191,6 +191,12 @@
                                     </div>';
                                     unset($_SESSION['status']);
                                 }
+                                if(isset($_SESSION['status']) && $_SESSION['status'] == 'title already exist') {
+                                    echo '<div class="alert alert-danger" id="title-alert" role="alert">
+                                    Title already exist!
+                                    </div>';
+                                    unset($_SESSION['status']);
+                                }
                                 if(isset($_SESSION['status']) && $_SESSION['status'] == 'update unsuccessfully') {
                                     echo '<div class="alert alert-danger" id="title-alert" role="alert">
                                     Movie details update unsuccessfully!
@@ -217,15 +223,15 @@
                                 }
                             ?>
                         </form>
-                        <table id="movie" class="hover" style="border-color: teal;">
+                        <table id="movie" class="hover" style="border-color: teal; width: 100%;">
                             <thead>
-                                <tr style="white-space: nowrap;">
+                                <tr>
                                     <th scope="col">Movie ID</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Actor</th>
                                     <th scope="col">Genre</th>
                                     <th scope="col">Director</th>
-                                    <th scope="col" style="text-align: center;">Action</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -244,12 +250,12 @@
                                     <td class="action">
                                         <center>
                                             <a href="#" class="view" data-bs-toggle="modal"
-                                                data-bs-target="#movie-detailsView"><i class="fa-solid fa-eye"></i>VIEW</a>
+                                                data-bs-target="#movie-detailsView"><i class="fa-solid fa-eye"></i></a>
                                             <a href="#" class="edit" data-bs-toggle="modal"
                                                 data-bs-target="#editModal"><i
-                                                    class="fa-solid fa-pen-to-square "></i>EDIT</a>
+                                                    class="fa-solid fa-pen-to-square "></i></a>
                                             <a href="#" class="delete" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i>DELETE</a>
+                                                data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></a>
                                         </center>
                                     </td>
                                 </tr>
