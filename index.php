@@ -128,7 +128,7 @@
     </div>
 
 <!-- ADD MOVIES -->
-    <div class="container-fluid mt-3">
+    <div class="container mt-3">
         <div class="card" style="width: 100%; padding: 10px; margin-top: 80px;">
             <div class="row gx-2 gy-2">
                 <div class="col-md-3 mx-0">
