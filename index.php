@@ -34,12 +34,33 @@
 <body>
     <?php include 'includes/navbar.php';?>
 
-    <!-- EDIT MODAL -->
+<!-- VIEW MODAL -->
+    <div class="modal fade" id="movie-detailsView" tabindex="-1" aria-labelledby="movie-detailsViewLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="movie-detailsViewLabel" style="color: teal; font-weight: 700;">View Movie Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="movie-detailsView">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!-- EDIT MODAL -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Movie Details</h5>
+                    <h5 class="modal-title" id="editModalLabel" style="color: teal; font-weight: 700;">Edit Movie Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -72,7 +93,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" name="update">Save changes</button>
                 </div>
                 </form>
@@ -80,13 +101,39 @@
         </div>
     </div>
 
-    <!-- ADD MOVIES -->
+<!-- DELETE MODAL -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel" style="color: teal; font-weight: 700;">Edit Movie Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="includes/crud.php" method="POST">
+                        <div class="mb-3" style="display: none;">
+                            <label for="movie-id" class="form-label">Movie ID</label>
+                            <input type="text" class="form-control" placeholder="Movie ID" id="delete_movie-id" name="movie-id">
+                        </div>
+                        <h6>Are you sure, you want to delete this movie?</h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="delete">Delete</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!-- ADD MOVIES -->
     <div class="container mt-3">
         <div class="card" style="width: 100%; padding: 10px;">
             <div class="row gx-2">
                 <div class="col-md-3 mx-0">
                     <div class="card" style="width: 100%; padding: 10px;">
                         <form action="includes/crud.php" method="POST">
+                            <h1 style="text-align: center; font-weight: 700; font-size: 32px;">ADD MOVIE</h1>
                             <?php 
                                 if(isset($_SESSION['status']) && $_SESSION['status'] == 'no input') {
                                     echo '<div class="alert alert-danger" id="required-alert" role="alert">
@@ -133,7 +180,7 @@
                     </div>
                 </div>
 
-                <!-- MOVIES LIST TABLE -->
+<!-- MOVIES LIST TABLE -->
                 <div class="col-md-9 mx-0">
                     <div class="card" style="width: 100%; padding: 10px;">
                         <form action="">
@@ -156,6 +203,18 @@
                                     </div>';
                                     unset($_SESSION['status']);
                                 }
+                                if(isset($_SESSION['status']) && $_SESSION['status'] == 'deleted successfully') {
+                                    echo '<div class="alert alert-success" id="success" role="alert">
+                                    Movie deleted successfully!
+                                    </div>';
+                                    unset($_SESSION['status']);
+                                }
+                                if(isset($_SESSION['status']) && $_SESSION['status'] == 'delete unsuccessfully') {
+                                    echo '<div class="alert alert-danger" id="title-alert" role="alert">
+                                    Movie delete unsuccessfully!
+                                    </div>';
+                                    unset($_SESSION['status']);
+                                }
                             ?>
                         </form>
                         <table id="movie" class="hover" style="border-color: teal;">
@@ -166,7 +225,7 @@
                                     <th scope="col">Actor</th>
                                     <th scope="col">Genre</th>
                                     <th scope="col">Director</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col" style="text-align: center;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -184,10 +243,13 @@
                                     <td><?php echo $row['director']; ?></td>
                                     <td class="action">
                                         <center>
+                                            <a href="#" class="view" data-bs-toggle="modal"
+                                                data-bs-target="#movie-detailsView"><i class="fa-solid fa-eye"></i>VIEW</a>
                                             <a href="#" class="edit" data-bs-toggle="modal"
                                                 data-bs-target="#editModal"><i
                                                     class="fa-solid fa-pen-to-square "></i>EDIT</a>
-                                            <a href="#" class="delete"><i class="fa-solid fa-trash"></i>DELETE</a>
+                                            <a href="#" class="delete" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i>DELETE</a>
                                         </center>
                                     </td>
                                 </tr>
@@ -208,6 +270,24 @@
 
     <script>
     $(document).ready(function() {
+        $('.view').click(function(e) {
+            e.preventDefault();
+
+            var id = $(this).closest('tr').find('.id').text();
+            
+            $.ajax({
+                type: "POST",
+                url: "includes/crud.php",
+                data: {
+                    'checking_viewBtn': true,
+                    'movie_id': id,
+                },
+                success: function(response) {
+                    $('.movie-detailsView').html(response)
+                }
+            });
+        });
+
         $('.edit').click(function(e) {
             e.preventDefault();
 
@@ -231,6 +311,14 @@
                     });
                 }
             });
+        });
+
+        $('.delete').click(function(e) {
+            e.preventDefault();
+
+            var id = $(this).closest('tr').find('.id').text();
+            
+            $('#delete_movie-id').val(id);
         });
     });
     </script>

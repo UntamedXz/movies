@@ -29,15 +29,30 @@ label {
     color: teal !important;
 }
 
-.btn {
+.btn-outline-secondary {
+    color: teal;
+    border-color: teal;
+}
+
+.btn-outline-secondary:hover {
+    color: white;
+    border-color: teal;
+    background-color: teal;
+}
+
+.btn-primary {
     background-color: teal !important;
     border-color: teal !important;
     color: #fff !important;
 }
 
-.btn:hover {
+.btn-primary:hover {
     background-color: black !important;
     border-color: black !important;
+}
+
+table thead tr th {
+    text-transform: uppercase;
 }
 
 table tbody tr .action {
@@ -69,6 +84,16 @@ table tbody tr .action .delete {
     font-size: 12px;
 }
 
+table tbody tr .action .view {
+    background-color: teal;
+    color: white;
+    padding: 3px;
+    padding-right: 8px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
 table tbody tr .action a i {
     padding: 0 5px;
 }
+

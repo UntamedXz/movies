@@ -28,6 +28,26 @@
     }
 
 // READ
+    if(isset($_POST['checking_viewBtn'])) {
+        $movie_id = $_POST['movie_id'];
+        // echo $return = $movie_id;
+
+        $query = mysqli_query($conn, "SELECT * FROM tblmovies WHERE movie_id = '$movie_id'");
+        
+        if(mysqli_num_rows($query) > 0) {
+            foreach($query as $row) {
+                echo $return = '
+                    <h6><b>MOVIE_ID:</b> '.$row['movie_id'].'</h6>
+                    <h6><b>TITLE:</b> '.$row['title'].'</h6>
+                    <h6><b>ACTOR:</b> '.$row['actor'].'</h6>
+                    <h6><b>GENRE:</b> '.$row['genre'].'</h6>
+                    <h6><b>DIRECTOR:</b> '.$row['director'].'</h6>
+                ';
+            }
+        } else {
+            echo $return = "<h5>No record found.</h5>";
+        }
+    }
 
 // UPDATE
     if (isset($_POST['checking_editBtn'])) {
@@ -71,5 +91,17 @@
     }
 
 // DELETE
-    
+    if(isset($_POST['delete'])) {
+        $movie_id = $_POST['movie-id'];
+
+        $query = mysqli_query($conn, "DELETE FROM tblmovies WHERE movie_id = '$movie_id'");
+
+        if($query) {
+            $_SESSION['status'] = "deleted successfully";
+            echo '<script>window.location.replace("../index.php");</script>';
+        } else {
+            $_SESSION['status'] = "delete unsuccessfully";
+            echo '<script>window.location.replace("../index.php");</script>';
+        }
+    }
 ?>
